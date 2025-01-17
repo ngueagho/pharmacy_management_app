@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PharmacyManagementSystem
 <h2>🔥Pharmacy Dispensing Management System || Python Django</h2>
   
@@ -88,3 +89,7 @@ N/B: When adding New patient there are some validations in filling the forms
      Fake Filler Extension Chrome link:https://chrome.google.com/webstore/detail/fake-filler/bnjjngeaknajbdcgpfkgnonkmififhfo
 
 --------------------------------------------------------------------------------------
+=======
+# pharmacy_management_app
+pharmacy_management_app
+>>>>>>> 3b1e73bec1ee4e5fc92bf1901b7c2a4fa9185066
