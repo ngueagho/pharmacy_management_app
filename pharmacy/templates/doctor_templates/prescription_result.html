@@ -1,0 +1,36 @@
+{% extends 'doctor_templates/base_template.html'%}
+{% load crispy_forms_tags %}
+
+{% block page_title %}
+<h5>Prescribe</h5>
+
+{% endblock page_title %}
+{% block link %}
+<li class="breadcrumb-item active"><a href="{% url 'manage_patient_doctor' %}"> all patients</a></li>
+
+<li class="breadcrumb-item active">Prescribe</li>
+
+{% endblock link%}
+{% block main_content %}
+<section class="content">
+
+
+        <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Proposed  Drucks</h3>
+                    </div>
+                        <h2>Consultation Result</h2>
+
+  <p>PDF Filename: {{ openai_response.pdf_filename }}</p>
+  <p class="text-align">Proposed decision: {{ openai_response.openai_response }}</p>
+
+  <!-- Add more display logic as needed -->
+                    </div>
+
+                </div>
+            </div>
+</section>
+{% endblock main_content %}
