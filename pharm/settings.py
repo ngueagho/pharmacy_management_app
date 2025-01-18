@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 from django.core.cache import cache 
+from decouple import config
+
 
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 OPENAI_API_KEY = config('OPENAI_API_KEY')
