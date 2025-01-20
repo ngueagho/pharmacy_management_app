@@ -10,6 +10,13 @@ from phonenumber_field.formfields import PhoneNumberField
 from django.core.validators import RegexValidator
 
 import json
+
+
+class OTPForm(forms.Form):
+    otp_code = forms.CharField(max_length=6, widget=forms.TextInput(attrs={'placeholder': 'Entrez votre OTP'}))
+
+
+
 class PatientPicForm1(forms.ModelForm):
     class Meta:
         model=Patients

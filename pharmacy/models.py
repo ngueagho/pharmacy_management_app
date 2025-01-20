@@ -13,6 +13,34 @@ from django.db.models import BooleanField, ExpressionWrapper, Q
 from django.db.models.functions import Now
 
 
+
+
+# 
+from django.db import models
+from django.contrib.auth.models import User
+from datetime import timedelta
+from django.utils.timezone import now
+from django.conf import settings 
+
+class OTP(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,  # Utilisez AUTH_USER_MODEL
+        on_delete=models.CASCADE,
+        related_name='otp'
+    )
+    otp_code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False)
+
+    def is_valid(self):
+        """Check if the OTP is still valid (e.g., valid for 5 minutes)."""
+        return now() <= self.created_at + timedelta(minutes=5)
+
+    def __str__(self):
+        return f"OTP for {self.user.username} - Verified: {self.is_verified}"
+
+
+
 class CustomUser(AbstractUser):
     user_type_data = ((1, "AdminHOD"), (2, "Pharmacist"), (3, "Doctor"), (4, "PharmacyClerk"),(5, "Patients"))
     user_type = models.CharField(default=1, choices=user_type_data, max_length=10)

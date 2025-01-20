@@ -22,7 +22,7 @@ def pharmacistHome(request):
     total_stock=Stock.objects.all().count()
 
     context={
-"patients_total":patients_total,
+        "patients_total":patients_total,
         "expired_total":exipred,
         "out_of_stock":out_of_stock,
         "total_drugs":total_stock,
