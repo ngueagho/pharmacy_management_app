@@ -7,7 +7,7 @@
    
    
 
-<div> <img src="https://github.com/tchoumi313/PharmacyManagementSystem/blob/main/screenshot/Admin%20Login.png" width="400" height="200" />
+<div> <img src="https://github.com/tchoumi313/PharmacyManagementSystem/blob/main/screenshot/Admin%20Login.png](https://github.com/ngueagho/pharmacy_management_app/blob/main/screenshot/Admin%20Login.png" width="400" height="200" />
 <img src="https://github.com/tchoumi313/PharmacyManagementSystem/blob/main/screenshot/Pharmacist.png" width="400" height="200" />
 </div>
 <div> <img src="https://github.com/tchoumi313/PharmacyManagementSystem/blob/main/screenshot/Doctor%20Login.png" width="400" height="200" />
