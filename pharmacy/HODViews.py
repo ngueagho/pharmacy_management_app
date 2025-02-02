@@ -11,7 +11,7 @@ from datetime import datetime
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import datetime 
-
+import csv
 
 from .forms import *
 from .models import *
@@ -787,3 +787,95 @@ def drugDetails(request,pk):
 
     }
     return render(request,'hod_templates/view_drug.html',context)
+
+
+
+
+
+
+
+#importer le fichier csv
+def import_csv(request):
+    
+    if request.method == "POST":
+        # Récupérer le fichier téléchargé
+        csv_file = request.FILES.get("csv_file")
+        # Vérifier si le fichier est bien un fichier CSV
+        if not csv_file.name.endswith(".csv"):
+            messages.error(request, "Veuillez importer un fichier CSV valide.")
+            return redirect('manage_stock')
+
+        try:
+            # Lire et traiter le fichier CSV
+            decoded_file = csv_file.read().decode("utf-8").splitlines()
+            reader = csv.DictReader(decoded_file)
+
+            for row in reader:
+                # Récupérer ou créer la catégorie
+                category_name = row.get("category")
+                category, _ = Category.objects.get_or_create(name=category_name)
+
+                # Mettre à jour ou créer l'entrée dans le modèle Stock
+                Stock.objects.update_or_create(
+                    drug_name=row.get("drug_name"),
+                    category=category,
+                    defaults={
+                        "quantity": int(row.get("quantity", 0)),
+                        "reorder_level": int(row.get("reorder_level", 0)),
+                        "valid_to": row.get("valid_to"),  # Date d'expiration
+                    },
+                )
+
+            # Rediriger vers une page de succès après l'importation
+            messages.success(request, "Les données ont été importées avec succès.")
+        except Exception as e:
+            messages.error(request, f"Erreur lors de l'importation : {e}")
+        return redirect('manage_stock')
+
+    # Si la méthode n'est pas POST, afficher la page du formulaire
+    return render(request, "hod_templates/manage_stock.html")
+
+
+
+
+def shortage_check(request):
+    """
+    Vérifie les stocks de médicaments et envoie une alerte par email à l'administrateur
+    si la quantité d'un médicament est inférieure à 20.
+    """
+    # Récupérer tous les médicaments en pénurie (quantité < 20)
+    medicaments_en_penurie = Stock.objects.filter(quantity__lt=20)
+
+    if medicaments_en_penurie.exists():
+        # Construire un message d'alerte avec les médicaments concernés
+        lignes_alerte = [
+            f"{medicament.drug_name} - Stock insuffisant ({medicament.quantity})"
+            for medicament in medicaments_en_penurie
+        ]
+        sujet = "Alerte : Pénurie de médicaments"
+        message = "Les médicaments suivants sont en pénurie :\n\n" + "\n".join(lignes_alerte)
+
+        # Adresse email de l'administrateur
+        destinataire = settings.EMAIL_HOST_USER  # Assurez-vous que `ADMIN_EMAIL` est défini dans vos settings
+
+        # Envoyer l'email
+        send_mail(
+            sujet,
+            message,
+            settings.EMAIL_HOST_USER,
+            [destinataire],
+            fail_silently=False,
+        )
+        # Ajouter un message de succès
+        messages.success(request, "Alerte envoyée avec succès à l'administrateur.")
+    else:
+        # Ajouter un message d'information
+        messages.info(request, "Aucun médicament en pénurie.")
+
+    # Rediriger l'utilisateur vers une autre page
+    return redirect('manage_stock')  # Changez 'admin_dashboard' par le nom de votre vue cible
+
+
+
+
+

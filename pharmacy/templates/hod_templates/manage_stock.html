@@ -52,6 +52,20 @@
 
 
                         <a class="btn btn-sm btn-info mr-2" href="{% url 'add_stock' %}" role="button">+ Add New Drug</a>
+                        {% if messages %}
+                                {% for message in messages %}
+                                       <p style="color: {{ message.tags }}">{{ message }}</p>
+                                {% endfor %}
+                        {% endif %}
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'shortage_check' %}" role="button">+ Shortage Check</a>
+                          <!--Lien simulant un bouton -->
+                        <a href="javascript:void(0)" role="button" class="btn btn-sm btn-info mr-2" onclick="triggerFileInput()">+ Import Stock Drug</a>
+
+                        <!-- Formulaire masqué -->
+                        <form id="csvForm" method="POST" action="{% url 'import_csv' %}" enctype="multipart/form-data" style="display: none;">
+                            {% csrf_token %}
+                            <input type="file" id="csvInput" name="csv_file" accept=".csv" onchange="submitForm()">
+                        </form>
 
                     </div>
 
@@ -123,5 +137,16 @@
         </div>
     </div>
 </section>
+{% block js %} 
+<script>
+    function triggerFileInput() {
+        document.getElementById('csvInput').click();
+    }
+
+    function submitForm() {
+        document.getElementById('csvForm').submit();
+    }
+</script>
+{% endblock %} 
 
 {% endblock %}

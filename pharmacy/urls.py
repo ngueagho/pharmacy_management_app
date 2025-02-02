@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 
 from django.urls import path
 from .views import loginPage, verify_otp
-
+from . import HODViews
 
 
 
@@ -52,12 +52,16 @@ urlpatterns=[
     path('admin_user/edit_drug/<pk>/', HODViews.editStock, name="edit_drug"),
     path('admin_user/receive_drug/<pk>/', HODViews.receiveDrug, name="receive_drug"),
     path('admin_user/reorder_level/<str:pk>/', HODViews.reorder_level, name="reorder_level"),
+
+    path('admin_user/import_csv/',HODViews.import_csv,name='import_csv'),
+    path('admin_user/shortage_check/',HODViews.shortage_check,name='shortage_check'),
+
     path('admin_user/drug_details/<str:pk>/', HODViews.drugDetails, name="drug_detail"),
     path('patient_feedback_message/', pharmacistViews.patient_feedback_message, name="patient_feedback_message"),
     path('patient_feedback_message_reply/', pharmacistViews.patient_feedback_message_reply, name="patient_feedback_message_reply"),
     path('admin_user/delete_patient_feedback/<str:pk>/', pharmacistViews.deletefeedback, name="delete_fed"),
 
-        path('delete_details/<str:pk>/', pharmacistViews.deleteDispense4, name="del_disp"),
+    path('delete_details/<str:pk>/', pharmacistViews.deleteDispense4, name="del_disp"),
 
 
 
